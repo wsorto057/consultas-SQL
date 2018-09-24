@@ -1,0 +1,117 @@
+CREATE TABLE [dbo].[Employee](
+	[EmployeeID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](100) NULL,
+	[Position] [varchar](100) NULL,
+	[Age] [int] NULL,
+	[Salary] [int] NULL,
+ CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED 
+(
+	[EmployeeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE TABLE [dbo].[Department](
+	[DepartmentID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](100) NULL,
+	[Description] [varchar](100) NULL,
+ CONSTRAINT [PK_Department] PRIMARY KEY CLUSTERED 
+(
+	[DepartmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+  ----------------stored procedure-----------------------------
+
+CREATE procedure [dbo].[select_employee]
+as
+
+begin
+select * from Employee
+return
+
+end
+
+-------------------------------------------------------
+
+CREATE  procedure [dbo].[select_employee_by_id]
+@id varchar(5)
+as
+
+begin
+select * from Employee where EmployeeID=@id
+return
+
+end
+
+-------------------------------------------------------
+
+CREATE procedure [dbo].[insert_employee]
+@name varchar(20),
+@position varchar(20),
+@age varchar(20),
+@salary varchar(10)
+as
+
+begin
+insert into Employee (Name, Position, Age, Salary) values(@name,@position,@age,@salary);
+return
+
+end
+
+--------------------------------------------------
+
+CREATE procedure [dbo].[update_employee]
+@id varchar (20),
+@name varchar(20),
+@position varchar(20),
+@age varchar(20),
+@salary varchar(20)
+as
+
+begin
+update Employee 
+set
+name=@name, 
+position=@position,
+age=@age,
+salary=@salary
+where EmployeeID=@id
+
+return
+
+end
+
+-------------------------------------------------------
+
+CREATE procedure [dbo].[delete_employee]
+@id varchar (20)
+as
+
+begin
+delete from Employee where EmployeeID=@id
+
+return
+
+end
+
+
+
+
+----------------  trigger  -----------------
+
+CREATE trigger [dbo].[tr_student_insert]
+on [dbo].[student]
+after insert
+as
+begin
+set nocount on 
+insert into log_student (name, datecreated) select name, getdate()
+from inserted
+
+end

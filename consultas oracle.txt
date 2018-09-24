@@ -1,0 +1,101 @@
+
+-- creacion de tablas
+
+create table categoria
+(
+codigo nchar(10) not null,
+nombre varchar2(30) not null,
+descripcion varchar2(30) not null,
+constraint pk_codigo primary key(codigo)
+);
+
+create table producto
+(
+codigoproducto nchar(10) not null,
+nombre varchar2(50) not null,
+precio number(6),
+stock number(3),
+codigocategoria nchar(10),
+constraint pk_codigoproducto primary key(codigoproducto),
+constraint pk_codigoproducto FOREIGN key(codigocategoria) references categoria(codigo)
+);
+
+
+CREATE TABLE calculo_impuesto_3 (
+ID NUMBER GENERATED ALWAYS AS IDENTITY,
+nombre_impuesto VARCHAR2(30),
+porcentaje_impuesto number,
+constraint pk_id_calculo_impuesto_3 primary key(ID)
+);
+
+
+--------------------  funcion
+
+create or replace function porcentaje_renta
+(salario IN number)
+return number
+as
+calculo_renta number;
+begin
+
+ select salario *(porcentaje_impuesto/100) into calculo_renta from calculo_impuesto_3 where id=1;
+ 
+return calculo_renta;
+
+end;
+
+select porcentaje_renta(800) from dual
+
+
+
+ -------------  procedimiento  ----
+ 
+ create or replace procedure insertar_table
+(
+  descripcion_nueva varchar2
+)
+is
+begin
+insert into mytable (descripcion) values (descripcion_nueva);
+
+commit;
+
+end;
+
+----------------------------------------------------
+
+
+create or replace procedure modificar_table
+(
+numero_id number,
+descripcion_new varchar2
+)
+is
+begin
+
+update mytable
+set
+descripcion=descripcion_new
+where id = numero_id;
+
+commit;
+
+end;
+
+
+----------------------------------------------------
+
+create or replace procedure insertar_table
+(
+  descripcion_nueva varchar2
+)
+is
+begin
+insert into mytable (descripcion) values (descripcion_nueva);
+
+commit;
+
+end;
+ 
+ 
+
